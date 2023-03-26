@@ -13,7 +13,7 @@ class RevealDriver {
             return false;
         }
 
-        if(top > innerHeight) {
+        if(top > window.innerHeight) {
             return false;
         }
 
