@@ -4,6 +4,5 @@
 
 .rotator__case_active {
   display: inline;
+  color: var(--color);
 }
-
-
