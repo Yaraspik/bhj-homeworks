@@ -89,3 +89,11 @@ body {
 .product-shadow {
   position: absolute;
 }
+
+.hide {
+  display: none;
+}
+
+.cart__clear {
+  cursor: pointer;
+}
