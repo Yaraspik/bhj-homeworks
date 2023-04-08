@@ -14,25 +14,24 @@ class Cart {
     
 
     addCart (id, quantity, imgSrc) {
-        const products = this.cartProducts.querySelectorAll('.cart__product');
-        let foundIds = [];
+        const products = [...this.cartProducts.querySelectorAll('.cart__product')];
 
-        products.forEach(element => {
-            const cartProduct = element.querySelector('.cart__product-count');
-            if(element.dataset.id == id) {
-                cartProduct.textContent = Number(cartProduct.textContent) + Number(quantity);
-                foundIds.push(id);
-                return;
-            } 
-        });
-
-        if(!foundIds.includes(id)) {
+        let foundProduct = products.find((el) => {
+            if(el.dataset.id == id) {
+                return el;
+            }
+        })
+        
+        if(foundProduct){
+            const cartProduct = foundProduct.querySelector('.cart__product-count');
+            cartProduct.textContent = Number(cartProduct.textContent) + Number(quantity);
+        } else {
             this.cartProducts.insertAdjacentHTML(
-                    'beforeend',
-                    `<div class="cart__product" data-id="${id}">
-                    <img class="cart__product-image" src="${imgSrc}">
-                    <div class="cart__product-count">${quantity}</div>
-                    </div>`
+                'beforeend',
+                `<div class="cart__product" data-id="${id}">
+                <img class="cart__product-image" src="${imgSrc}">
+                <div class="cart__product-count">${quantity}</div>
+                </div>`
             );
         }
 

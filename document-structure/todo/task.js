@@ -12,9 +12,10 @@ class Todo {
         this.button.addEventListener('click', this.addTask.bind(this));
     }
 
-    addTask() {
-        if(!this.input.value) {
-            return;
+    addTask(e) {
+        e.preventDefault();
+        if(!this.input.value.trim()) {
+            return this.input.value = '';
         }
 
         this.list.insertAdjacentHTML(
@@ -28,16 +29,13 @@ class Todo {
         );
 
         const taskTitles = this.list.querySelectorAll('.task__title');
-        taskTitles.forEach(element => {
-            if(element.innerText == this.input.value) {
-                element.nextElementSibling.addEventListener('click', this.removeTask);
-            }
-        });
-         
+        taskTitles[taskTitles.length - 1].nextElementSibling.addEventListener('click', this.removeTask);
+
         this.input.value = '';
     }
 
     removeTask(event) {
+        console.log(event)
         event.target.parentElement.remove();
     }
 }
