@@ -8,60 +8,52 @@ class Card {
 
     setBehaviorOfCheckboxes() {
         this.checkboxes.forEach(element => {
-            element.addEventListener('click', this.check);
+            element.addEventListener('click', this.click);
         });
     }
 
-    check(event) {
-        const checkBoxListLocated = event.target.closest('li');
-        const lengthCurrentList = event.target.closest('ul').querySelectorAll('.interest__check').length;
-        const selectedInterests  = event.target.closest('ul').querySelectorAll( '.interest__check:checked' ).length;
-        const elParent = event.target.closest('ul .interests');
-        const arCheckboxes = checkBoxListLocated.querySelectorAll('.interest__check');
-        let parentCheckbox = '';
-
-        if(event.target.closest('.interests').closest('.interest')) {
-            parentCheckbox = event.target.closest('.interests').closest('.interest').querySelector('.interest__check');
-        }
-        
-        if(event.target.checked == true){
-            arCheckboxes.forEach(element => {
-                if(element.closest('ul').closest('li') === checkBoxListLocated.closest('li')) {
-                    element.checked = true;
-                }
-            });
-            
-            if(selectedInterests  > 0 && elParent) {
-                card.allParents(event.target, true);
-            }
-            
-            if(selectedInterests  == lengthCurrentList) {
-                parentCheckbox.indeterminate = false;
-                parentCheckbox.checked = true;
-            }
-        } else {
-            arCheckboxes.forEach(element => {
-                element.checked = false;
-            });
-
-            if(selectedInterests  != lengthCurrentList && elParent) {
-                parentCheckbox.checked = false;
-            }
-
-            if(selectedInterests  == 0 && elParent || selectedInterests  > 0 && elParent) {
-                card.allParents(event.target, false);
-            }
-        }
+    click(e) {
+        const element = e.target;
+        card.setChild(element);
+        card.setParent(element);
     }
 
-    allParents(el, position) {
-        let parent = el.closest('.interests').closest('.interest');
-        if(parent){
-            parent.querySelector('.interest__check').indeterminate = position;
-            this.allParents(parent.querySelector('.interest__check'), position);
-        } else {
-            false;
+    setChild(element) {
+        const checked = element.checked;
+        const currentList = element.closest('.interest');
+        const childCheckboxes = currentList.querySelectorAll('.interest__check');
+        childCheckboxes.forEach(el => {
+            el.checked = checked;
+        })
+    }
+
+    setParent(element) {
+        const parentList = element.closest('.interests').closest('.interest');
+        
+        if(!parentList) {
+            return;
         }
+        
+        const currentList = element.closest('.interests');
+        const quantityCheckboxes = currentList.querySelectorAll('.interest__check').length;
+        const quantityCheckedCheckboxes = currentList.querySelectorAll('.interest__check:checked').length;
+        const mainCheckbox = parentList.querySelector('.interest__check');
+
+        if(quantityCheckboxes == quantityCheckedCheckboxes) {
+            mainCheckbox.indeterminate = false;
+            mainCheckbox.checked = true;
+        }
+
+        if(quantityCheckedCheckboxes == 0) {
+            mainCheckbox.indeterminate = false;
+            mainCheckbox.checked = false;
+        }
+
+        if(quantityCheckedCheckboxes > 0 && quantityCheckedCheckboxes < quantityCheckboxes) {
+            mainCheckbox.indeterminate = true;
+        }
+        
+        card.setParent(mainCheckbox);
     }
 }
 

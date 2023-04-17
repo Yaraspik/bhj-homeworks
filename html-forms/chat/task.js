@@ -22,7 +22,7 @@ class ChatGPT {
         const input = this.chatWidget.querySelector('.chat-widget__input');
 
         input.addEventListener('keydown', (event) => {
-            let inputValue = input.value;
+            let inputValue = input.value.trim();
             let currentTime = this.getCurrentTime();
 
             if(!inputValue) {
